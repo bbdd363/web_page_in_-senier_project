@@ -1,0 +1,230 @@
+﻿<!DOCTYPE>
+<HTML>
+<HEAD>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style type="text/css">
+    BODY {
+        background: #000;
+        background-size : contain;
+    }
+    .btn_bg_01,.table{
+        margin-top: 5%;
+        margin-bottom: 5%;
+        text-align:center;
+        color:white;
+    }
+
+    p{
+        margin-top: 7%;
+/*        margin-bottom: 3%;*/
+        text-align: center;
+    }
+</style>
+</HEAD>
+
+<BODY>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<p><img src="/static/balck_fire.jpg" width="50%" ></p>
+<script type="text/javascript">
+ 
+    // ÆÄÀÏ ¸®½ºÆ® ¹øÈ£
+    var fileIndex = 0;
+    var totalFileSize = 0;
+    var fileList = new Array();
+    var fileSizeList = new Array();
+    var uploadSize = 50;
+    var maxUploadSize = 500;
+ 
+    $(function(){
+        fileDropDown();
+    });
+ 
+    // ÆÄÀÏ µå·Ó ´Ù¿î
+    function fileDropDown(){
+        var dropZone = $("#dropZone");
+        //Drag±â´É 
+        dropZone.on('dragenter',function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            // µå·Ó´Ù¿î ¿µ¿ª css
+            dropZone.css('background-color','#E3F2FC');
+        });
+        dropZone.on('dragleave',function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            // µå·Ó´Ù¿î ¿µ¿ª css
+            dropZone.css('background-color','#FFFFFF');
+        });
+        dropZone.on('dragover',function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            // µå·Ó´Ù¿î ¿µ¿ª css
+            dropZone.css('background-color','#E3F2FC');
+        });
+        dropZone.on('drop',function(e){
+            e.preventDefault();
+            // µå·Ó´Ù¿î ¿µ¿ª css
+            dropZone.css('background-color','#FFFFFF');
+            
+            var files = e.originalEvent.dataTransfer.files;
+            if(files != null){
+                if(files.length < 1){
+                    alert("Æú´õ ¾÷·Îµå ºÒ°¡");
+                    return;
+                }
+                selectFile(files)
+            }else{
+                alert("ERROR");
+            }
+        });
+    }
+ 
+    function selectFile(files){
+        if(files != null){
+            for(var i = 0; i < files.length; i++){
+                // ÆÄÀÏ ÀÌ¸§
+                var fileName = files[i].name;
+                var fileNameArr = fileName.split("\.");
+                // È®ÀåÀÚ
+                var ext = fileNameArr[fileNameArr.length - 1];
+                // ÆÄÀÏ »çÀÌÁî(´ÜÀ§ :MB)
+                var fileSize = files[i].size / 1024 / 1024;
+                
+                if($.inArray(ext, ['exe', 'bat', 'sh', 'java', 'jsp', 'html', 'js', 'css', 'xml']) >= 0){
+                    // È®ÀåÀÚ Ã¼Å©
+                    alert("µî·Ï ºÒ°¡ È®ÀåÀÚ");
+                    break;
+                }else if(fileSize > uploadSize){
+                    // ÆÄÀÏ »çÀÌÁî Ã¼Å©
+                    alert("¿ë·® ÃÊ°ú\n¾÷·Îµå °¡´É ¿ë·® : " + uploadSize + " MB");
+                    break;
+                }else{
+                    // ÀüÃ¼ ÆÄÀÏ »çÀÌÁî
+                    totalFileSize += fileSize;
+                    
+                    // ÆÄÀÏ ¹è¿­¿¡ ³Ö±â
+                    fileList[fileIndex] = files[i];
+                    
+                    // ÆÄÀÏ »çÀÌÁî ¹è¿­¿¡ ³Ö±â
+                    fileSizeList[fileIndex] = fileSize;
+ 
+                    // ¾÷·Îµå ÆÄÀÏ ¸ñ·Ï »ý¼º
+                    addFileList(fileIndex, fileName, fileSize);
+ 
+                    // ÆÄÀÏ ¹øÈ£ Áõ°¡
+                    fileIndex++;
+                }
+            }
+        }else{
+            alert("ERROR");
+        }
+    }
+ 
+    function addFileList(fIndex, fileName, fileSize){
+        var html = "";
+        html += "<tr id='fileTr_" + fIndex + "'>";
+        html += "    <td class='left' >";
+        html +=         fileName + " / " + fileSize + "MB "  + "<a href='#' onclick='deleteFile(" + fIndex + "); return false;' class='btn small bg_02'></a>"
+        html += "    </td>"
+        html += "</tr>"
+ 
+        $('#fileTableTbody').append(html);
+    }
+ 
+    function deleteFile(fIndex){
+        totalFileSize -= fileSizeList[fIndex];
+        delete fileList[fIndex];
+        delete fileSizeList[fIndex];
+        $("#fileTr_" + fIndex).remove();
+    }
+ 
+
+    function uploadFile(){
+        confrim(fileList)
+        var uploadFileList = Object.keys(fileList);
+        if(uploadFileList.length == 0){
+            alert("길이가 너무 짧음");
+            return;
+        }
+        
+        // ¿ë·®À» 500MB¸¦ ³ÑÀ» °æ¿ì ¾÷·Îµå ºÒ°¡
+        if(totalFileSize > maxUploadSize){
+            // ÆÄÀÏ »çÀÌÁî ÃÊ°ú °æ°íÃ¢
+            alert("ÃÑ ¿ë·® ÃÊ°ú\nÃÑ ¾÷·Îµå °¡´É ¿ë·® : " + maxUploadSize + " MB");
+            return;
+        }
+        var data1 = {"name":"John Doe","age":"21"};
+        if(confirm("전송 해보려??")){  
+            var form = $('#uploadForm')[0];
+            var formData = new FormData(form);
+            for(var i = 0; i < uploadFileList.length; i++){
+                confirm(i);
+                confirm(fileList[uploadFileList[i]]);
+                confirm(uploadFileList[i]);
+                formData.append('files', fileList[uploadFileList[i]]);
+            }
+            confirm(formData)
+
+            confirm("ajax 시작")
+            $.ajax({ 
+                type: 'POST', 
+                contentType: 'application/json',
+                url: 'ksm' ,
+                dataType:'json',
+                data :  JSON.stringify(formData),
+            
+                success: function(result) { 
+                     if(result.data.length > 0){
+                        alert("¼º°ø");
+                        location.reload();
+                    }else{
+                        alert("½ÇÆÐ");
+                        location.reload();
+                    }
+                } 
+            });
+
+
+            confirm("ajax 완료")
+
+
+            // $.ajax({ 
+            //     type: 'GET' , 
+            //     url: 'ksm' , 
+            //     data : 'hy',
+            //     dataType : 'html' , 
+            //     success: function(data) { 
+            //         $("#listDiv").html(data); 
+            //     } 
+            // });
+        
+        }
+    }
+
+</script>
+
+<p><img src="/static/images.png" id=btn_bg_01 width="10%" height="20%"></p>
+
+    <!-- <form name="uploadForm" id="uploadForm" enctype="multipart/form-data" method="post">
+        <table class="table" width="50%" height="15%" border="1px" bordercolor="white" align="center">
+            <tbody id="fileTableTbody">
+                <tr>
+                    <td id="dropZone" align="center">
+                    
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+        
+    <p href="#" onclick="uploadFile()"; return false; class="btn_bg_01"; > 분석하기 </p>
+ -->
+
+
+
+
+</BODY>
+</HTML>
+
+
+
