@@ -1,0 +1,366 @@
+<!DOCTYPE>
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script src="{{ url_for('static',filename='script/Chart.min.js')}}"></script>
+<script src="{{ url_for('static',filename='script/utils.js') }}"></script>
+
+<script type="text/javascript">
+
+var first ="";
+
+function Dalack_lab(num,bul)
+{
+    var dama = document.getElementById(bul);
+    var script = document.getElementById(num);
+
+    if(dama.src.match("{{url_for('static',filename='image/box1.png')}}")){
+        dama.src="{{url_for('static',filename='image/box2.png')}}";
+    }else{
+        dama.src="{{url_for('static',filename='image/box1.png')}}";
+    }
+
+
+    if(first!=script)
+    {
+        if(first!=""){
+            first.style.display='none';
+        }
+        script.style.display='block';          
+        first=script;
+    }
+    else
+    {  
+        script.style.display='none';
+        first="";
+    }
+
+    if(script.style.display=='block'){
+        $(script).slideDown();
+    }
+    else{
+        $(script).slideUp();
+    }
+}
+
+var change_result = 1;
+
+function change_express(box_express,yara_express,deep_expcress){
+    var box_obj = document.getElementById(box_express);
+    var yara_obj = document.getElementById(yara_express);
+    var deep_obj = document.getElementById(deep_expcress);
+
+    if(change_result%2==1){
+        yara_obj.style.display='none';
+        deep_obj.style.display='block';
+        box_obj.innerText='Deep Result' 
+    }
+    else{
+        yara_obj.style.display='block';
+        deep_obj.style.display='none';
+        box_obj.innerText='Yara Result' 
+    }
+
+    change_result++;
+}
+
+</script>
+
+<style type="text/css">
+
+
+
+.wrap {
+    position: absolute;
+    top: 37%;
+    left: 10%;
+    margin-top: -86px;
+    margin-left: -89px;
+    text-align: center;
+}
+
+
+
+
+a {
+    -webkit-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    -moz-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    -ms-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    -o-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    display: block;
+    margin: 20px auto;
+    max-width: 180px;
+    text-decoration: none;
+    border-radius: 4px;
+    padding: 20px 30px;
+}
+
+a.button {
+    color: rgba(30, 22, 54, 0.6);
+    box-shadow: rgba(30, 22, 54, 0.4) 0 0px 0px 2px inset;
+}
+
+a.button:hover {
+    color: rgba(255, 255, 255, 0.85);
+    box-shadow: rgba(30, 22, 54, 0.7) 0 0px 0px 40px inset;
+}
+
+
+    .bg1 { background-color:#E6E6E6; }  /*마우스 위치시 색깔 변경*/ 
+    .bg2 { background-color:#FFFFFF; }
+
+    #title
+    {
+        width: 30%;
+        height: 10%;
+        background-color: green;
+        position: relative;
+        top: 5px;
+        left: 5%;
+    }
+
+    #canvas-holder{
+        position: absolute;
+        top:37%;
+        left:5.5%;
+/*        top: 30%;
+        left: 100px;*/
+        border:3px solid #D8D8D8;
+    }
+    #file_data
+    {
+        width: 90%;
+        height: 15%;
+        background-color: white;
+        position: relative;
+        border:3px solid #D8D8D8;
+        top: 0%;
+        left: 5%;
+    }
+    #yara_rule
+    {
+        width: 50%;
+        height: 5%;
+        background-color: white;
+        border:3px solid #D8D8D8;
+        position: relative;
+        top: 3%;
+        left: 5%;
+    }
+    #text{
+        position: relative;
+        top: 5%;
+        left: 10px;
+        font-family:"나눔스퀘어라운드 ExtraBold";
+    }
+
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+
+    table {
+        background-color: white;
+        position: absolute;
+        border:3px solid #D8D8D8;
+        top:37%;
+        left:50%;
+        width: 40.5%; 
+      }
+    th{
+        text-align: left;
+    }
+
+</style>
+</HEAD>
+
+<BODY>
+
+  <div class="wrap">
+        <a onclick="javascript:change_express('box_express','yara_express','deep_expcress')" id='box_express' href="#" class="button">Yara result</a>
+    </div>
+
+    <img src="{{url_for('static',filename='image/deep.jpg')}}" id="title"></p>
+    <div id=file_data>
+        <p id=text> FILE SHA256 : </p>
+        <p id=text> FILE NAME : </p>
+        <p id=text> MATCH YARA : </p>
+    </div>
+
+    <div id="yara_express">
+        <table>
+            <tr onMouseOver="this.className='bg1'" onMouseOut="this.className='bg2'">
+                <th><img onclick="javascript:Dalack_lab('a33','bul3')"id="bul3"; 
+                    src="{{url_for('static',filename='image/box1.png')}}"; width=15px; height=15px;/>
+                    제목
+            </th>
+            </tr>
+            <tr>
+                <td id='a33' style="display: none; text-align: center;">
+                    내용1
+                </td>
+            </tr>
+
+
+            <tr onMouseOver="this.className='bg1'" onMouseOut="this.className='bg2'">
+                <th><img onclick="javascript:Dalack_lab('a44','bul4')"id="bul4"; 
+                    src="{{url_for('static',filename='image/box1.png')}}"; width=15px; height=15px;/>
+                    제목
+
+            </th>
+            </tr>
+            <tr>
+                <td id='a44' style="display: none; text-align: center;">
+                    내용1
+                </td>
+            </tr>
+
+        </table>
+      
+
+        <div id="canvas-holder" style="width:40%; height: 45%;">
+            <canvas id="chart-area"></canvas>
+        </div>
+    </div>
+
+    <div id="deep_expcress" style="display: none;">
+        input deep learning result
+    </div>
+
+
+
+
+
+    <script>
+        var randomScalingFactor = function() {
+            return Math.round(Math.random() * 100);
+        };
+
+        var config = {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                        randomScalingFactor(),
+                    ],
+                    backgroundColor: [
+                        window.chartColors.red,
+                        window.chartColors.orange,
+                        window.chartColors.yellow,
+                        window.chartColors.green,
+                        window.chartColors.blue,
+                    ],
+                    label: 'Dataset 1'
+                }],
+                labels: [
+                    'Red',
+                    'Orange',
+                    'Yellow',
+                    'Green',
+                    'Blue'
+                ]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Chart.js Doughnut Chart'
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            }
+        };
+
+        window.onload = function() {
+            var ctx = document.getElementById('chart-area').getContext('2d');
+            window.myDoughnut = new Chart(ctx, config);
+        };
+
+        document.getElementById('randomizeData').addEventListener('click', function() {
+            config.data.datasets.forEach(function(dataset) {
+                dataset.data = dataset.data.map(function() {
+                    return randomScalingFactor();
+                });
+            });
+
+            window.myDoughnut.update();
+        });
+
+        var colorNames = Object.keys(window.chartColors);
+        document.getElementById('addDataset').addEventListener('click', function() {
+            var newDataset = {
+                backgroundColor: [],
+                data: [],
+                label: 'New dataset ' + config.data.datasets.length,
+            };
+
+            for (var index = 0; index < config.data.labels.length; ++index) {
+                newDataset.data.push(randomScalingFactor());
+
+                var colorName = colorNames[index % colorNames.length];
+                var newColor = window.chartColors[colorName];
+                newDataset.backgroundColor.push(newColor);
+            }
+
+            config.data.datasets.push(newDataset);
+            window.myDoughnut.update();
+        });
+
+        document.getElementById('addData').addEventListener('click', function() {
+            if (config.data.datasets.length > 0) {
+                config.data.labels.push('data #' + config.data.labels.length);
+
+                var colorName = colorNames[config.data.datasets[0].data.length % colorNames.length];
+                var newColor = window.chartColors[colorName];
+
+                config.data.datasets.forEach(function(dataset) {
+                    dataset.data.push(randomScalingFactor());
+                    dataset.backgroundColor.push(newColor);
+                });
+
+                window.myDoughnut.update();
+            }
+        });
+
+        document.getElementById('removeDataset').addEventListener('click', function() {
+            config.data.datasets.splice(0, 1);
+            window.myDoughnut.update();
+        });
+
+        document.getElementById('removeData').addEventListener('click', function() {
+            config.data.labels.splice(-1, 1); // remove the label first
+
+            config.data.datasets.forEach(function(dataset) {
+                dataset.data.pop();
+                dataset.backgroundColor.pop();
+            });
+
+            window.myDoughnut.update();
+        });
+
+        document.getElementById('changeCircleSize').addEventListener('click', function() {
+            if (window.myDoughnut.options.circumference === Math.PI) {
+                window.myDoughnut.options.circumference = 2 * Math.PI;
+                window.myDoughnut.options.rotation = -Math.PI / 2;
+            } else {
+                window.myDoughnut.options.circumference = Math.PI;
+                window.myDoughnut.options.rotation = -Math.PI;
+            }
+
+            window.myDoughnut.update();
+        });
+    </script>
+
+</BODY>
+</HTML>
