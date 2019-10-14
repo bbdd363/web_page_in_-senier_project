@@ -1,30 +1,53 @@
 ﻿<!DOCTYPE>
 <HTML>
 <HEAD>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
 <style type="text/css">
     BODY {
-        background: #000;
-        background-size : contain;
+        background: #FFF;
     }
+
+    #uploadBtn{
+        box-shadow: 0px 0px 5px 5px rgba(110,110,110,0.09);
+        position: absolute;
+        top: 37%;
+        left: 20%;
+        border:1px solid;
+        padding:10px;
+        width:60%;
+        height:4%;
+        border-radius: 20px;
+
+    }
+
+    #search_img{
+        position: absolute;
+        top: 37.7%;
+        left: 75.5%;
+        width:5%;
+        height:5%;
+    }
+
     form{
         text-align: center;
-/*        margin-top: 0%;
-        margin-bottom: 0%;*/
-        color:white;
     }
     p{
+        position: absolute;
+        top: 10%;
+        left: 3%;
+        width: 95%;
+        height: 95%;
         text-align: center;
         margin-top: 5%;
         margin-bottom: 3%;
-        color:white;
     }
     a{
         text-align: center;
         margin-top: 5%;
         margin-bottom: 3%;
-        color:white;
+
     }
 
 
@@ -33,43 +56,23 @@
 </HEAD>
 <BODY>
 
-<p><img src="/static/balck_fire.jpg" width="50%" ></p>
-    <form id="uploadForm">
-        <input type="file" id="imgupload" name=file style="display:none"/> 
-        <img src="/static/images.png" id="uploadBtn" width="10%" height="20%"></img>
-    </form>
-<a id=send> SEND </a>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script>
-            $('#uploadBtn').click(function(){ 
-                $('#imgupload').trigger('click'); 
-                });
+<p><img src="{{url_for('static',filename='image/deep.jpg')}}" width="50%" ></p>
+<form id="uploadForm" action="http://localhost:5000/file_input" method="POST" enctype="multipart/form-data">
+    <div id="uploadBtn"> </div>
+    <img id="search_img" src="{{url_for('static',filename='image/search1.png')}}">
+    <input type="file" id="imgupload" name=file style="display:none"/> 
+    <input type="submit" id="submit_id" style="display:none"/> 
+</form>
 
 
-                $('#send').on('click', function(){
-                    uploadFile();
-                });
-
-
- 
-    function uploadFile(){
-        
-        var form = $('#uploadForm')[0];
-        var formData = new FormData(form);
-     
-        $.ajax({
-            url : '/ksm',
-            type : 'POST',
-            data : formData,
-            contentType : false,
-            processData : false        
-        }).done(function(data){
-            callback(data);
+<script>
+    $('#uploadBtn').click(function(){ 
+        $('#imgupload').trigger('click'); 
         });
-    }
-
-
-        </script>
+    $('#search_img').click(function(){
+        $('#submit_id').trigger('click');
+    });
+</script>
 
 
 </BODY>

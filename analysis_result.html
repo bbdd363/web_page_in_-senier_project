@@ -1,11 +1,72 @@
 <!DOCTYPE>
 <HTML>
 <HEAD>
+<script src="{{ url_for('static',filename='script/Chart_min.js')}}"></script>
+<script src="{{ url_for('static',filename='script/utils.js') }}"></script>    
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<script src="{{ url_for('static',filename='script/Chart.min.js')}}"></script>
-<script src="{{ url_for('static',filename='script/utils.js') }}"></script>
 
 <script type="text/javascript">
+
+    function main() {
+      var tag = "<table>";
+      var b1 = parseInt({{result['yara_count']}});
+      var test = "{{result|safe}}";
+
+      // alert("{{result[0]}}");
+      for (var j = 0; j < b1; j++) {
+        if(j==0){
+            tag += "<tr onMouseOver=this.className='bg1' onMouseOut=this.className='bg2'>";
+            tag += "<th><img onclick=javascript:Dalack_lab('aul"+j+"','bul"+j+"') id='bul"+j+"'; src='{{url_for('static',filename='image/box1.png')}}'; width=15px; height=15px;/> ";
+            tag+= "{{result[0]}}";
+            tag+= "</th>";
+            tag+= "</tr>";
+
+            tag+="<tr>";
+            tag+="<td id='aul"+j+"' style='display: none; text-align: center;'>";
+            tag+="{{result[10]}}";
+            tag+="</td>";
+            tag+="</tr>";
+        }
+        if(j==1){
+            tag += "<tr onMouseOver=this.className='bg1' onMouseOut=this.className='bg2'>";
+            tag += "<th><img onclick=javascript:Dalack_lab('aul"+j+"','bul"+j+"') id='bul"+j+"'; src='{{url_for('static',filename='image/box1.png')}}'; width=15px; height=15px;/> ";
+            tag+= "{{result[1]}}";
+            tag+= "</th>";
+            tag+= "</tr>";
+
+            tag+="<tr>";
+            tag+="<td id='aul"+j+"' style='display: none; text-align: center;'>";
+            tag+="{{result[11]}}";
+            tag+="</td>";
+            tag+="</tr>";
+        }
+        if(j==2){
+            tag += "<tr onMouseOver=this.className='bg1' onMouseOut=this.className='bg2'>";
+            tag += "<th><img onclick=javascript:Dalack_lab('aul"+j+"','bul"+j+"') id='bul"+j+"'; src='{{url_for('static',filename='image/box1.png')}}'; width=15px; height=15px;/> ";
+            tag+= "{{result[2]}}";
+            tag+= "</th>";
+            tag+= "</tr>";
+
+            tag+="<tr>";
+            tag+="<td id='aul"+j+"' style='display: none; text-align: center;'>";
+            tag+="{{result[12]}}";
+            tag+="</td>";
+            tag+="</tr>";
+        }
+
+
+      }
+      tag += "</table>";
+      area.innerHTML = tag;
+    }
+
+
+
+
+
+
+
+    
 
 var first ="";
 
@@ -65,11 +126,7 @@ function change_express(box_express,yara_express,deep_expcress){
 }
 
 </script>
-
 <style type="text/css">
-
-
-
 .wrap {
     position: absolute;
     top: 37%;
@@ -184,15 +241,17 @@ a.button:hover {
 
     <img src="{{url_for('static',filename='image/deep.jpg')}}" id="title"></p>
     <div id=file_data>
-        <p id=text> FILE SHA256 : </p>
-        <p id=text> FILE NAME : </p>
-        <p id=text> MATCH YARA : </p>
+        <p id=text> FILE NAME : {{result['name']}} </p>
+        <p id=text> FILE SHA256 : {{result['hash']}}</p>
+        <p id=text> FILE SIZE : {{result['size']}} </p>
     </div>
 
+    <div id="area"></div>
+
     <div id="yara_express">
-        <table>
+        <!-- <table>
             <tr onMouseOver="this.className='bg1'" onMouseOut="this.className='bg2'">
-                <th><img onclick="javascript:Dalack_lab('a33','bul3')"id="bul3"; 
+                <th><img onclick="javascript:Dalack_lab('a33','bul3')" id="bul3"; 
                     src="{{url_for('static',filename='image/box1.png')}}"; width=15px; height=15px;/>
                     제목
             </th>
@@ -217,7 +276,8 @@ a.button:hover {
                 </td>
             </tr>
 
-        </table>
+        </table> -->
+
       
 
         <div id="canvas-holder" style="width:40%; height: 45%;">
@@ -243,27 +303,22 @@ a.button:hover {
             data: {
                 datasets: [{
                     data: [
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
-                        randomScalingFactor(),
+                        {{result['gand']}},
+                        {{result['wanna']}},
+                        {{result['lol']}},
+
                     ],
                     backgroundColor: [
                         window.chartColors.red,
-                        window.chartColors.orange,
-                        window.chartColors.yellow,
                         window.chartColors.green,
                         window.chartColors.blue,
                     ],
                     label: 'Dataset 1'
                 }],
                 labels: [
-                    'Red',
-                    'Orange',
-                    'Yellow',
-                    'Green',
-                    'Blue'
+                    'GandCrab',
+                    'Wannacry',
+                    'Lollipop',
                 ]
             },
             options: {
@@ -273,7 +328,7 @@ a.button:hover {
                 },
                 title: {
                     display: true,
-                    text: 'Chart.js Doughnut Chart'
+                    text: 'YARA RATE RESULT CHART'
                 },
                 animation: {
                     animateScale: true,
@@ -283,6 +338,7 @@ a.button:hover {
         };
 
         window.onload = function() {
+            javascript:main();
             var ctx = document.getElementById('chart-area').getContext('2d');
             window.myDoughnut = new Chart(ctx, config);
         };
